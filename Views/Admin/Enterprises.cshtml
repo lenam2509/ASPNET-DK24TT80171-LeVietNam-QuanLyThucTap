@@ -1,0 +1,77 @@
+@model IEnumerable<InternshipManagement.Models.Enterprise>
+@{
+    ViewData["Title"] = "Quản lý Doanh nghiệp";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Quản lý Doanh nghiệp</h2>
+    <a asp-action="CreateEnterprise" class="btn btn-primary">Thêm Doanh nghiệp mới</a>
+</div>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<form method="get" asp-action="Enterprises" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="searchString" value="@ViewBag.SearchString" class="form-control" placeholder="Tìm kiếm theo Tên DN, Địa chỉ..." />
+        <button type="submit" class="btn btn-outline-secondary">Tìm kiếm</button>
+        @if (!string.IsNullOrEmpty(ViewBag.SearchString))
+        {
+            <a asp-action="Enterprises" class="btn btn-outline-danger">Xóa lọc</a>
+        }
+    </div>
+</form>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Mã DN</th>
+            <th>Tên Doanh nghiệp</th>
+            <th>Địa chỉ</th>
+            <th width="150">Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="4" class="text-center">Không tìm thấy doanh nghiệp nào.</td>
+            </tr>
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaDN</td>
+                <td>@item.TenDN</td>
+                <td>@item.DiaChi</td>
+                <td>
+                    <div class="d-flex gap-2">
+                        <a asp-action="EditEnterprise" asp-route-id="@item.MaDN" class="btn btn-sm btn-info text-white">Sửa</a>
+                        <form asp-action="DeleteEnterprise" asp-route-id="@item.MaDN" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa doanh nghiệp này?');">
+                            <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (ViewBag.TotalPages > 1)
+{
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.PageNumber ? "active" : "")">
+                    <a class="page-link" asp-action="Enterprises" asp-route-pageNumber="@i" asp-route-searchString="@ViewBag.SearchString">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

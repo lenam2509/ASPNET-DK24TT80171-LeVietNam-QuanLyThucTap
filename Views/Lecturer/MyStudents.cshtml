@@ -1,0 +1,25 @@
+@model IEnumerable<InternshipManagement.Models.InternshipRegistration>
+
+<h2>Sinh viên hướng dẫn</h2>
+
+<table class="table">
+    <tr>
+        <th>Sinh viên</th>
+        <th>Doanh nghiệp</th>
+        <th>Nhận xét</th>
+        <th>Điểm</th>
+        <th>Cập nhật</th>
+    </tr>
+    @foreach (var item in Model) {
+        <tr>
+            <form asp-action="Grade" method="post">
+                <input type="hidden" name="id" value="@item.Id" />
+                <td>@item.Student?.HoTen (@item.MSSV)</td>
+                <td>@item.Enterprise?.TenDN</td>
+                <td><input type="text" name="comment" value="@item.NhanXetGV" class="form-control" /></td>
+                <td><input type="number" step="0.1" name="score" value="@item.Diem" class="form-control" /></td>
+                <td><button type="submit" class="btn btn-primary btn-sm">Lưu</button></td>
+            </form>
+        </tr>
+    }
+</table>

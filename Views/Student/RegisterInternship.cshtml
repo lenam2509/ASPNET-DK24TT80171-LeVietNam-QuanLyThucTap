@@ -1,0 +1,24 @@
+@model InternshipManagement.Models.InternshipRegistration
+
+<h2>Đăng ký thực tập</h2>
+
+<form asp-action="RegisterInternship" asp-route-id="" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input type="hidden" asp-for="MSSV" />
+    
+    <div class="form-group">
+        <label>Doanh nghiệp thực tập</label>
+        <select asp-for="MaDN" asp-items="ViewBag.MaDN" class="form-control" required>
+            <option value="">-- Chọn doanh nghiệp --</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="NguoiHuongDanDN"></label>
+        <input asp-for="NguoiHuongDanDN" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="ThoiGianThucTap"></label>
+        <input asp-for="ThoiGianThucTap" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-success mt-2">Đăng ký</button>
+</form>

@@ -1,0 +1,84 @@
+@model InternshipManagement.Models.Student
+@{
+    ViewData["Title"] = "Thông tin Thực tập";
+    var reg = ViewBag.Registration as InternshipManagement.Models.InternshipRegistration;
+}
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h2 class="text-center mb-4">Thông tin Sinh viên & Thực tập</h2>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Thông tin cá nhân</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>MSSV:</strong> @Model?.MSSV</p>
+                <p><strong>Họ tên:</strong> @Model?.HoTen</p>
+                <p><strong>Lớp:</strong> @Model?.Lop</p>
+                <p><strong>Ngành:</strong> @Model?.Nganh</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Trạng thái Thực tập</h5>
+            </div>
+            <div class="card-body">
+                @if (reg == null)
+                {
+                    <p class="text-danger">Bạn chưa đăng ký thực tập tại doanh nghiệp nào.</p>
+                    <a asp-action="RegisterInternship" asp-route-id="@Model?.MSSV" class="btn btn-warning">Đăng ký thực tập ngay</a>
+                }
+                else
+                {
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong>Doanh nghiệp đăng ký:</strong> @reg.Enterprise?.TenDN</li>
+                        <li class="list-group-item">
+                            <strong>Trạng thái:</strong> 
+                            @if (reg.TrangThai == 0)
+                            {
+                                <span class="badge bg-warning text-dark">Đang chờ duyệt</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">Đã duyệt</span>
+                            }
+                        </li>
+                        @if (reg.Lecturer != null)
+                        {
+                            <li class="list-group-item"><strong>Giảng viên hướng dẫn:</strong> @reg.Lecturer.HoTen</li>
+                        }
+                    </ul>
+
+                    @if (reg.TrangThai == 1)
+                    {
+                        <div class="mt-4 p-3 border rounded bg-light">
+                            <h6 class="text-primary">Nộp Báo Cáo Thực Tập</h6>
+                            @if (!string.IsNullOrEmpty(reg.FileBaoCao))
+                            {
+                                <p>File hiện tại: <a href="@reg.FileBaoCao" target="_blank">Xem file báo cáo</a></p>
+                            }
+                            
+                            <form asp-action="UploadReport" method="post" enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                    <input type="file" name="reportFile" class="form-control" accept=".pdf,.doc,.docx" required />
+                                    <button class="btn btn-primary" type="submit">Tải lên</button>
+                                </div>
+                                <small class="text-muted">Chỉ nhận file .pdf, .doc, .docx</small>
+                            </form>
+                            
+                            @if (reg.Diem.HasValue || !string.IsNullOrEmpty(reg.NhanXetGV))
+                            {
+                                <hr/>
+                                <h6>Kết quả đánh giá:</h6>
+                                <p><strong>Điểm:</strong> <span class="badge bg-success fs-6">@reg.Diem</span></p>
+                                <p><strong>Nhận xét:</strong> @reg.NhanXetGV</p>
+                            }
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

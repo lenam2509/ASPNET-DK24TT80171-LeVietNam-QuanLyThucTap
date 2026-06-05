@@ -1,0 +1,26 @@
+@model InternshipManagement.Models.Enterprise
+@{
+    ViewData["Title"] = "Thêm Doanh nghiệp";
+}
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h2 class="text-center">Thêm Doanh nghiệp mới</h2>
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success">@TempData["Message"]</div>
+        }
+        <form asp-action="CreateEnterprise" method="post">
+            <div class="form-group mb-3">
+                <label asp-for="TenDN"></label>
+                <input asp-for="TenDN" class="form-control" required />
+                <span asp-validation-for="TenDN" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="DiaChi"></label>
+                <input asp-for="DiaChi" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-warning w-100">Lưu Doanh nghiệp</button>
+        </form>
+    </div>
+</div>

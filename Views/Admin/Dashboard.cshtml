@@ -1,0 +1,97 @@
+@{
+    ViewData["Title"] = "Dashboard Thống kê";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Dashboard Tổng Quan</h2>
+</div>
+
+<div class="row">
+    <!-- Biểu đồ Sinh viên theo Ngành -->
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Sinh viên theo Ngành học</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="majorChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Biểu đồ Sinh viên theo Doanh nghiệp -->
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Sinh viên thực tập tại Doanh nghiệp</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="enterpriseChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Tích hợp Chart.js từ CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Dữ liệu từ ViewBag chuyển sang JSON
+        const majors = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.Majors));
+        const majorCounts = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.MajorCounts));
+
+        const enterprises = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.Enterprises));
+        const enterpriseCounts = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.EnterpriseCounts));
+
+        // 1. Vẽ biểu đồ Tròn (Pie Chart) cho Ngành học
+        const ctxMajor = document.getElementById('majorChart').getContext('2d');
+        new Chart(ctxMajor, {
+            type: 'pie',
+            data: {
+                labels: majors,
+                datasets: [{
+                    data: majorCounts,
+                    backgroundColor: [
+                        '#0d6efd', '#6610f2', '#6f42c1', '#d63384', '#dc3545',
+                        '#fd7e14', '#ffc107', '#198754', '#20c997', '#0dcaf0'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // 2. Vẽ biểu đồ Cột (Bar Chart) cho Doanh nghiệp
+        const ctxEnterprise = document.getElementById('enterpriseChart').getContext('2d');
+        new Chart(ctxEnterprise, {
+            type: 'bar',
+            data: {
+                labels: enterprises,
+                datasets: [{
+                    label: 'Số lượng sinh viên',
+                    data: enterpriseCounts,
+                    backgroundColor: '#198754',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1 }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    </script>
+}

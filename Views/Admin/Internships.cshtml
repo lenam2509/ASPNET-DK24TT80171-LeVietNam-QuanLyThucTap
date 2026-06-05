@@ -1,0 +1,45 @@
+@model IEnumerable<InternshipManagement.Models.InternshipRegistration>
+
+<h2>Quản lý Đăng ký thực tập</h2>
+
+<table class="table">
+    <tr>
+        <th>Sinh viên</th>
+        <th>Doanh nghiệp</th>
+        <th>Trạng thái</th>
+        <th>Hành động (Duyệt)</th>
+    </tr>
+    @foreach (var item in Model) {
+        <tr>
+            <td>@item.Student?.HoTen (@item.MSSV)</td>
+            <td>@item.Enterprise?.TenDN</td>
+            <td>@(item.TrangThai == 0 ? "Chờ duyệt" : (item.TrangThai == 1 ? "Đã duyệt" : "Từ chối"))</td>
+            <td>
+                @if (item.TrangThai == 0)
+                {
+                    <form asp-action="Approve" method="post">
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <select name="lecturerId" asp-items="ViewBag.Lecturers" class="form-select form-select-sm d-inline-block w-auto" required>
+                            <option value="">-- Chọn Giảng viên --</option>
+                        </select>
+                        <button type="submit" class="btn btn-success btn-sm">Duyệt & Phân công</button>
+                    </form>
+                }
+                else if (item.TrangThai == 1)
+                {
+                    <div class="text-success mb-2">
+                        <strong>GV hướng dẫn:</strong> @(item.Lecturer?.HoTen ?? "Chưa có") <br/>
+                        <small class="text-muted">HD tại DN: @(string.IsNullOrEmpty(item.NguoiHuongDanDN) ? "Chưa cập nhật" : item.NguoiHuongDanDN)</small>
+                    </div>
+                    <form asp-action="Approve" method="post">
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <select name="lecturerId" asp-items="ViewBag.Lecturers" class="form-select form-select-sm d-inline-block w-auto" required>
+                            <option value="">-- Đổi GV mới --</option>
+                        </select>
+                        <button type="submit" class="btn btn-warning btn-sm">Đổi GV</button>
+                    </form>
+                }
+            </td>
+        </tr>
+    }
+</table>

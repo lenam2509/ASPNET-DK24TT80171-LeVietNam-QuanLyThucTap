@@ -1,0 +1,59 @@
+@model IEnumerable<InternshipManagement.Models.InternshipRegistration>
+@{
+    ViewData["Title"] = "Danh sách sinh viên phụ trách";
+}
+
+<h2>Danh sách Sinh viên phụ trách</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<table class="table table-bordered mt-3">
+    <thead class="table-dark">
+        <tr>
+            <th>MSSV</th>
+            <th>Họ Tên</th>
+            <th>Doanh nghiệp</th>
+            <th>Báo cáo</th>
+            <th>Điểm</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(!Model.Any())
+        {
+            <tr>
+                <td colspan="6" class="text-center">Bạn chưa được phân công hướng dẫn sinh viên nào.</td>
+            </tr>
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MSSV</td>
+                <td>@item.Student?.HoTen</td>
+                <td>@item.Enterprise?.TenDN</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.FileBaoCao))
+                    {
+                        <a href="@item.FileBaoCao" class="btn btn-sm btn-info text-white" target="_blank">Xem Báo Cáo</a>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Chưa nộp</span>
+                    }
+                </td>
+                <td>
+                    @(item.Diem.HasValue ? item.Diem.ToString() : "-")
+                </td>
+                <td>
+                    <a asp-action="Grade" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Chấm điểm</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

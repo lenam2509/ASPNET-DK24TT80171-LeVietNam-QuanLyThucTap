@@ -1,0 +1,36 @@
+@model InternshipManagement.Models.Enterprise
+@{
+    ViewData["Title"] = "Sửa thông tin Doanh nghiệp";
+}
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h2 class="text-center">Sửa Doanh nghiệp</h2>
+        
+        <form asp-action="EditEnterprise" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="MaDN" />
+            
+            <div class="form-group mb-3">
+                <label>Mã Doanh nghiệp</label>
+                <input value="@Model.MaDN" class="form-control" disabled />
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="TenDN"></label>
+                <input asp-for="TenDN" class="form-control" required />
+                <span asp-validation-for="TenDN" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="DiaChi"></label>
+                <textarea asp-for="DiaChi" class="form-control" rows="3"></textarea>
+            </div>
+            
+            <div class="d-flex justify-content-between mt-4">
+                <a asp-action="Enterprises" class="btn btn-secondary">Quay lại</a>
+                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+            </div>
+        </form>
+    </div>
+</div>

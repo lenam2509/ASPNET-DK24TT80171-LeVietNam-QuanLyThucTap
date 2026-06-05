@@ -1,0 +1,81 @@
+@model IEnumerable<InternshipManagement.Models.Student>
+@{
+    ViewData["Title"] = "Quản lý Sinh viên";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Quản lý Sinh viên</h2>
+    <a asp-action="CreateStudent" class="btn btn-primary">Thêm Sinh viên mới</a>
+</div>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<form method="get" asp-action="Students" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="searchString" value="@ViewBag.SearchString" class="form-control" placeholder="Tìm kiếm theo MSSV, Tên, Ngành..." />
+        <button type="submit" class="btn btn-outline-secondary">Tìm kiếm</button>
+        @if (!string.IsNullOrEmpty(ViewBag.SearchString))
+        {
+            <a asp-action="Students" class="btn btn-outline-danger">Xóa lọc</a>
+        }
+    </div>
+</form>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>MSSV</th>
+            <th>Họ tên</th>
+            <th>Lớp</th>
+            <th>Ngành</th>
+            <th>Khóa học</th>
+            <th width="150">Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="6" class="text-center">Không tìm thấy sinh viên nào.</td>
+            </tr>
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MSSV</td>
+                <td>@item.HoTen</td>
+                <td>@item.Lop</td>
+                <td>@item.Nganh</td>
+                <td>@item.KhoaHoc</td>
+                <td>
+                    <div class="d-flex gap-2">
+                        <a asp-action="EditStudent" asp-route-id="@item.MSSV" class="btn btn-sm btn-info text-white">Sửa</a>
+                        <form asp-action="DeleteStudent" asp-route-id="@item.MSSV" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sinh viên này? Toàn bộ dữ liệu liên quan có thể bị ảnh hưởng.');">
+                            <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (ViewBag.TotalPages > 1)
+{
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.PageNumber ? "active" : "")">
+                    <a class="page-link" asp-action="Students" asp-route-pageNumber="@i" asp-route-searchString="@ViewBag.SearchString">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

@@ -1,0 +1,42 @@
+@model InternshipManagement.Models.Student
+@{
+    ViewData["Title"] = "Thêm Sinh viên";
+}
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h2 class="text-center">Thêm Sinh viên (Dành cho Admin)</h2>
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success">@TempData["Message"]</div>
+        }
+        <form asp-action="CreateStudent" method="post">
+            <div class="form-group mb-3">
+                <label asp-for="MSSV"></label>
+                <input asp-for="MSSV" class="form-control" required />
+                <span asp-validation-for="MSSV" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="HoTen"></label>
+                <input asp-for="HoTen" class="form-control" required />
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Lop"></label>
+                <input asp-for="Lop" class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Nganh"></label>
+                <input asp-for="Nganh" class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="KhoaHoc"></label>
+                <input asp-for="KhoaHoc" class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" type="password" class="form-control" required />
+            </div>
+            <button type="submit" class="btn btn-success w-100">Tạo tài khoản</button>
+        </form>
+    </div>
+</div>
