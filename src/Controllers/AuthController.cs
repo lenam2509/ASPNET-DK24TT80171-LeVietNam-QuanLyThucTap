@@ -19,6 +19,13 @@ namespace InternshipManagement.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("Admin")) return RedirectToAction("Internships", "Admin");
+                if (User.IsInRole("Lecturer")) return RedirectToAction("Index", "Lecturer");
+                if (User.IsInRole("Student")) return RedirectToAction("Index", "Student");
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 

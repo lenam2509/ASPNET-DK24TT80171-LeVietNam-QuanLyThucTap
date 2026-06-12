@@ -38,6 +38,16 @@
                 <input asp-for="KhoaHoc" class="form-control" />
             </div>
             
+            <div class="form-group mb-3">
+                <label asp-for="HocKy"></label>
+                <select asp-for="HocKy" class="form-select">
+                    <option value="">-- Chọn học kỳ --</option>
+                    <option value="Học kỳ 1">Học kỳ 1</option>
+                    <option value="Học kỳ 2">Học kỳ 2</option>
+                    <option value="Học kỳ 3">Học kỳ 3</option>
+                </select>
+            </div>
+            
             <hr />
             <h5>Đổi mật khẩu (Tùy chọn)</h5>
             <div class="form-group mb-3">

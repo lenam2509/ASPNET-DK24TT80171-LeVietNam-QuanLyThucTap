@@ -19,8 +19,14 @@
 <form method="get" asp-action="Students" class="mb-4">
     <div class="input-group">
         <input type="text" name="searchString" value="@ViewBag.SearchString" class="form-control" placeholder="Tìm kiếm theo MSSV, Tên, Ngành..." />
+        <select name="hocKy" class="form-select" style="max-width: 200px;">
+            <option value="">-- Tất cả học kỳ --</option>
+            <option value="Học kỳ 1" selected="@(ViewBag.HocKy == "Học kỳ 1" ? "selected" : null)">Học kỳ 1</option>
+            <option value="Học kỳ 2" selected="@(ViewBag.HocKy == "Học kỳ 2" ? "selected" : null)">Học kỳ 2</option>
+            <option value="Học kỳ 3" selected="@(ViewBag.HocKy == "Học kỳ 3" ? "selected" : null)">Học kỳ 3</option>
+        </select>
         <button type="submit" class="btn btn-outline-secondary">Tìm kiếm</button>
-        @if (!string.IsNullOrEmpty(ViewBag.SearchString))
+        @if (!string.IsNullOrEmpty(ViewBag.SearchString) || !string.IsNullOrEmpty(ViewBag.HocKy))
         {
             <a asp-action="Students" class="btn btn-outline-danger">Xóa lọc</a>
         }
@@ -35,6 +41,7 @@
             <th>Lớp</th>
             <th>Ngành</th>
             <th>Khóa học</th>
+            <th>Học kỳ</th>
             <th width="150">Hành động</th>
         </tr>
     </thead>
@@ -42,7 +49,7 @@
         @if (!Model.Any())
         {
             <tr>
-                <td colspan="6" class="text-center">Không tìm thấy sinh viên nào.</td>
+                <td colspan="7" class="text-center">Không tìm thấy sinh viên nào.</td>
             </tr>
         }
         @foreach (var item in Model)
@@ -53,6 +60,7 @@
                 <td>@item.Lop</td>
                 <td>@item.Nganh</td>
                 <td>@item.KhoaHoc</td>
+                <td>@item.HocKy</td>
                 <td>
                     <div class="d-flex gap-2">
                         <a asp-action="EditStudent" asp-route-id="@item.MSSV" class="btn btn-sm btn-info text-white">Sửa</a>
@@ -73,7 +81,7 @@
             @for (int i = 1; i <= ViewBag.TotalPages; i++)
             {
                 <li class="page-item @(i == ViewBag.PageNumber ? "active" : "")">
-                    <a class="page-link" asp-action="Students" asp-route-pageNumber="@i" asp-route-searchString="@ViewBag.SearchString">@i</a>
+                    <a class="page-link" asp-action="Students" asp-route-pageNumber="@i" asp-route-searchString="@ViewBag.SearchString" asp-route-hocKy="@ViewBag.HocKy">@i</a>
                 </li>
             }
         </ul>

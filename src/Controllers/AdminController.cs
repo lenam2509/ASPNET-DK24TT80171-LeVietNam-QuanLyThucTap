@@ -96,7 +96,7 @@ namespace InternshipManagement.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Students(string searchString, int pageNumber = 1)
+        public async Task<IActionResult> Students(string searchString, string hocKy, int pageNumber = 1)
         {
             int pageSize = 10;
             var students = _context.Students.AsQueryable();
@@ -108,7 +108,13 @@ namespace InternshipManagement.Controllers
                                                s.Nganh.Contains(searchString));
             }
 
+            if (!string.IsNullOrEmpty(hocKy))
+            {
+                students = students.Where(s => s.HocKy == hocKy);
+            }
+
             ViewBag.SearchString = searchString;
+            ViewBag.HocKy = hocKy;
             
             int totalItems = await students.CountAsync();
             var items = await students.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
@@ -138,6 +144,7 @@ namespace InternshipManagement.Controllers
             existingStudent.Lop = student.Lop;
             existingStudent.Nganh = student.Nganh;
             existingStudent.KhoaHoc = student.KhoaHoc;
+            existingStudent.HocKy = student.HocKy;
 
             if (!string.IsNullOrEmpty(newPassword))
             {
